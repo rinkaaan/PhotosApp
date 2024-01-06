@@ -10,7 +10,8 @@
     "lint": "eslint --ext .ts,.tsx .",
     "lint:fix": "eslint --fix --ext .ts,.tsx .",
     "run:ios": "ionic cap run ios --livereload --external --target 38C62A4D-C4BA-47E2-BC46-584DD04B10D7",
-    "open:ios": "cap open ios"
+    "open:ios": "cap open ios",
+    "sync:ios": "ionic cap sync ios"
   },
   "dependencies": {
     "@capacitor/app": "5.0.6",
@@ -19,10 +20,15 @@
     "@capacitor/ios": "^5.6.0",
     "@capacitor/keyboard": "5.0.7",
     "@capacitor/status-bar": "5.0.6",
+    "@cloudscape-design/components": "^3.0.478",
+    "@cloudscape-design/global-styles": "^1.0.21",
+    "@reduxjs/toolkit": "^2.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^9.0.4",
     "react-router": "^6.21.1",
-    "react-router-dom": "^6.21.1"
+    "react-router-dom": "^6.21.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@capacitor/cli": "5.6.0",
@@ -32,6 +38,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "@typescript-eslint/parser": "^6.17.0",
     "@vitejs/plugin-legacy": "^5.0.0",

@@ -1,12 +1,12 @@
 import { CapacitorConfig } from "@capacitor/cli"
 
 const config: CapacitorConfig = {
-  appId: "io.ionic.starter",
+  appId: "com.nguylinc.photos",
   appName: "Photos",
   webDir: "dist",
   server: {
     androidScheme: "https"
-  }
+  },
 }
 
 export default config
