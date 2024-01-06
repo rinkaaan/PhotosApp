@@ -1,5 +1,5 @@
 {
-  "name": "Photos",
+  "name": "capacitor-app",
   "integrations": {
     "capacitor": {}
   },
