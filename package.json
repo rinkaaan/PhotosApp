@@ -11,9 +11,14 @@
     "lint:fix": "eslint --fix --ext .ts,.tsx .",
     "run:ios": "ionic cap run ios --livereload --external --target 38C62A4D-C4BA-47E2-BC46-584DD04B10D7",
     "open:ios": "cap open ios",
-    "sync:ios": "ionic cap sync ios"
+    "sync:ios": "ionic cap sync ios",
+    "gen:icon": "npx capacitor-assets generate --ios",
+    "gen:ipa": "./scripts/create_ipa.sh",
+    "clear:derived-data": "rm -rf ./ios/DerivedData",
+    "open:electron": "cap open @capacitor-community/electron"
   },
   "dependencies": {
+    "@capacitor-community/electron": "^5.0.1",
     "@capacitor/app": "5.0.6",
     "@capacitor/core": "5.6.0",
     "@capacitor/haptics": "5.0.6",
@@ -31,6 +36,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.4",
     "@capacitor/cli": "5.6.0",
     "@testing-library/dom": ">=7.21.4",
     "@testing-library/jest-dom": "^5.16.5",
