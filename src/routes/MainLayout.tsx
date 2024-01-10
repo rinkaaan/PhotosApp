@@ -6,17 +6,18 @@ import { useSelector } from "react-redux"
 import { mainActions, mainSelector, prepareNotifications } from "./mainSlice"
 import { appDispatch } from "../common/store"
 import { CrumbHandle } from "../App"
+import ScrollToTop from "../components/ScrollToTop"
 
 const items: SideNavigationProps.Item[] = [
   {
     type: "link",
-    text: "Albums",
-    href: "/albums",
+    text: "All Media",
+    href: "/media",
   },
   {
     type: "link",
-    text: "All Media",
-    href: "/media",
+    text: "Albums",
+    href: "/albums",
   },
   {
     type: "link",
@@ -74,10 +75,11 @@ export default function MainLayout() {
   }, [crumbs])
 
   if (location.pathname === "/") {
-    return <Navigate to="/albums" replace/>
+    return <Navigate to="/media" replace/>
   } else {
     return (
       <Fragment>
+        <ScrollToTop />
         <AppLayout
           navigation={
             <SideNavigation

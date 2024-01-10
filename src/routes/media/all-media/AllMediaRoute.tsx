@@ -1,38 +1,44 @@
-import { Box, Button, Cards, Header, Pagination, SpaceBetween, TextFilter } from "@cloudscape-design/components"
+import { Box, Cards, Header, Pagination, SpaceBetween, TextFilter } from "@cloudscape-design/components"
 import { useState } from "react"
-import { Album } from "../../../openapi-client"
-import CloudLink from "../../components/CloudLink"
+import { Media } from "../../../../openapi-client"
+import CloudLink from "../../../components/CloudLink"
+import { uuid } from "../../../common/typedUtils"
+import CloudButton from "../../../components/CloudButton"
 
-const items: Album[] = [
+const items: Media[] = [
   {
-    name: "Item 1",
+    title: "Item 1",
     // thumbnail_path: "https://picsum.photos/682/383",
     thumbnail_path: "https://dummyimage.com/600x400/000/fff",
+    albums: [{ name: "test album" }, { name: "test album 2" }]
   },
   {
-    name: "Item 2",
+    title: "Item 2",
     // thumbnail_path: "https://picsum.photos/682/384",
     thumbnail_path: "https://dummyimage.com/600x400/000/fff",
   },
   {
-    name: "Item 3",
+    title: "Item 3",
     // thumbnail_path: "https://picsum.photos/683/385",
     thumbnail_path: "https://dummyimage.com/600x400/000/fff",
+    albums: [{ name: "test album" }]
   },
   {
-    name: "Item 4",
+    title: "Item 4",
     // thumbnail_path: "https://picsum.photos/683/386",
     thumbnail_path: "https://dummyimage.com/600x400/000/fff",
+    albums: [{ name: "test album" }, { name: "test album 2" }]
   },
   {
-    name: "Item 5",
+    title: "Item 5",
     // thumbnail_path: "https://picsum.photos/683/387",
     thumbnail_path: "https://dummyimage.com/600x400/000/fff",
   },
   {
-    name: "Item 6",
+    title: "Item 6",
     // thumbnail_path: "https://picsum.photos/683/388",
     thumbnail_path: "https://dummyimage.com/600x400/000/fff",
+    albums: [{ name: "test album" }]
   },
 ]
 
@@ -40,30 +46,35 @@ export function Component() {
   const [
     selectedItems,
     setSelectedItems,
-  ] = useState<Album[]>([])
+  ] = useState<Media[]>([])
 
   const isOnlyOneSelected = selectedItems.length === 1
 
   return (
     <Cards
-      onSelectionChange={({ detail }) =>
+      onSelectionChange={({ detail }) => {
+        console.log(detail?.selectedItems)
         setSelectedItems(detail?.selectedItems ?? [])
-      }
+      }}
       selectedItems={selectedItems}
       ariaLabels={{
-        itemSelectionLabel: (e, t) => `select ${t.name}`,
+        itemSelectionLabel: (e, t) => `select ${t.title}`,
         selectionGroupLabel: "Item selection",
       }}
       cardDefinition={{
-        // header: item => item.name,
-        // make header a link to # using CloudLink component
-        header: item => <CloudLink href="#" fontSize="heading-m">{item.name}</CloudLink>,
+        header: item => <CloudLink href="#" fontSize="heading-m">{item.title}</CloudLink>,
         sections: [
-          // {
-          //   id: "type",
-          //   header: "Type",
-          //   content: item => item.type,
-          // },
+          {
+            id: "albums",
+            content: (item) => {
+              const links = item.albums?.map(album => <CloudLink href="#" key={uuid()}>#{album.name}</CloudLink>)
+              return (
+                <SpaceBetween size="xs" direction="horizontal">
+                  {links}
+                </SpaceBetween>
+              )
+            }
+          },
           {
             id: "image",
             content: item => (
@@ -86,9 +97,9 @@ export function Component() {
       items={items}
       loadingText="Loading resources"
       selectionType="multi"
-      trackBy="name"
+      trackBy="title"
       variant="full-page"
-      visibleSections={["type", "image"]}
+      visibleSections={["albums", "image"]}
       stickyHeader={true}
       empty={
         <Box
@@ -98,7 +109,7 @@ export function Component() {
         >
           <SpaceBetween size="m">
             <b>No resources</b>
-            <Button>Create resource</Button>
+            <CloudButton>Create resource</CloudButton>
           </SpaceBetween>
         </Box>
       }
@@ -115,19 +126,19 @@ export function Component() {
           }
           actions={
             <SpaceBetween size="xs" direction="horizontal">
-              <Button data-testid="header-btn-edit" disabled={!isOnlyOneSelected}>
+              <CloudButton disabled={!isOnlyOneSelected}>
                 Edit
-              </Button>
-              <Button data-testid="header-btn-delete" disabled={selectedItems.length === 0}>
+              </CloudButton>
+              <CloudButton disabled={selectedItems.length === 0}>
                 Delete
-              </Button>
-              <Button data-testid="header-btn-create" variant="primary">
+              </CloudButton>
+              <CloudButton variant="primary" href="new">
                 Create
-              </Button>
+              </CloudButton>
             </SpaceBetween>
           }
         >
-          Albums
+          All Media
         </Header>
       }
       pagination={

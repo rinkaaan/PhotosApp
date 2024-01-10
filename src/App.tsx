@@ -1,4 +1,4 @@
-import { createHashRouter, Navigate, RouterProvider } from "react-router-dom"
+import { createHashRouter, Navigate, Outlet, RouterProvider } from "react-router-dom"
 import MainLayout from "./routes/MainLayout"
 import MainLayoutError from "./routes/MainLayoutError"
 import { mainSelector } from "./routes/mainSlice"
@@ -18,13 +18,35 @@ const router = createHashRouter([
     children: [
       {
         path: "/albums",
-        lazy: () => import("./routes/albums/AlbumsRoute"),
+        Component: Outlet,
         handle: createCrumb("Albums", "/albums"),
+        children: [
+          {
+            index: true,
+            lazy: () => import("./routes/albums/list-albums/ListAlbumsRoute"),
+          },
+          {
+            path: "new",
+            lazy: () => import("./routes/albums/new-album/NewAlbumRoute"),
+            handle: createCrumb("New Album", "/albums/new"),
+          },
+        ],
       },
       {
         path: "/media",
-        lazy: () => import("./routes/all-media/AllMediaRoute"),
+        Component: Outlet,
         handle: createCrumb("All Media", "/media"),
+        children: [
+          {
+            index: true,
+            lazy: () => import("./routes/media/all-media/AllMediaRoute"),
+          },
+          {
+            path: "new",
+            lazy: () => import("./routes/media/add-media/AddMediaRoute"),
+            handle: createCrumb("Add Media", "/media/new"),
+          },
+        ],
       },
       {
         path: "settings",
