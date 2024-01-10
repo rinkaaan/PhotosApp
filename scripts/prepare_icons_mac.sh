@@ -32,6 +32,11 @@ WORKSPACE="$WORKPLACE/PhotosApp"
   cp temp/icon_1024.png src/assets/Icon.iconset/icon_512x512@2x.png
 
   iconutil -c icns src/assets/Icon.iconset
+
+  ICON_SRC="$WORKPLACE/PhotosApp/src/assets/WindowsIcon.png"
+  convert "$ICON_SRC" -resize 64x64 temp/favicon.png
+  cp temp/favicon.png public/favicon.png
+
   rm -rf temp
   rm -rf src/assets/Icon.iconset
 )
