@@ -7,30 +7,36 @@ import { uuid } from "../../common/typedUtils"
 const items: Media[] = [
   {
     title: "Item 1",
-    thumbnail_path: "https://picsum.photos/682/383",
+    // thumbnail_path: "https://picsum.photos/682/383",
+    thumbnail_path: "https://dummyimage.com/600x400/000/fff",
     albums: [{ name: "test album" }, { name: "test album 2" }]
   },
   {
     title: "Item 2",
-    thumbnail_path: "https://picsum.photos/682/384",
+    // thumbnail_path: "https://picsum.photos/682/384",
+    thumbnail_path: "https://dummyimage.com/600x400/000/fff",
   },
   {
     title: "Item 3",
-    thumbnail_path: "https://picsum.photos/683/385",
+    // thumbnail_path: "https://picsum.photos/683/385",
+    thumbnail_path: "https://dummyimage.com/600x400/000/fff",
     albums: [{ name: "test album" }]
   },
   {
     title: "Item 4",
-    thumbnail_path: "https://picsum.photos/683/386",
+    // thumbnail_path: "https://picsum.photos/683/386",
+    thumbnail_path: "https://dummyimage.com/600x400/000/fff",
     albums: [{ name: "test album" }, { name: "test album 2" }]
   },
   {
     title: "Item 5",
-    thumbnail_path: "https://picsum.photos/683/387",
+    // thumbnail_path: "https://picsum.photos/683/387",
+    thumbnail_path: "https://dummyimage.com/600x400/000/fff",
   },
   {
     title: "Item 6",
-    thumbnail_path: "https://picsum.photos/683/388",
+    // thumbnail_path: "https://picsum.photos/683/388",
+    thumbnail_path: "https://dummyimage.com/600x400/000/fff",
     albums: [{ name: "test album" }]
   },
 ]

@@ -6,27 +6,33 @@ import CloudLink from "../../components/CloudLink"
 const items: Album[] = [
   {
     name: "Item 1",
-    thumbnail_path: "https://picsum.photos/682/383",
+    // thumbnail_path: "https://picsum.photos/682/383",
+    thumbnail_path: "https://dummyimage.com/600x400/000/fff",
   },
   {
     name: "Item 2",
-    thumbnail_path: "https://picsum.photos/682/384",
+    // thumbnail_path: "https://picsum.photos/682/384",
+    thumbnail_path: "https://dummyimage.com/600x400/000/fff",
   },
   {
     name: "Item 3",
-    thumbnail_path: "https://picsum.photos/683/385",
+    // thumbnail_path: "https://picsum.photos/683/385",
+    thumbnail_path: "https://dummyimage.com/600x400/000/fff",
   },
   {
     name: "Item 4",
-    thumbnail_path: "https://picsum.photos/683/386",
+    // thumbnail_path: "https://picsum.photos/683/386",
+    thumbnail_path: "https://dummyimage.com/600x400/000/fff",
   },
   {
     name: "Item 5",
-    thumbnail_path: "https://picsum.photos/683/387",
+    // thumbnail_path: "https://picsum.photos/683/387",
+    thumbnail_path: "https://dummyimage.com/600x400/000/fff",
   },
   {
     name: "Item 6",
-    thumbnail_path: "https://picsum.photos/683/388",
+    // thumbnail_path: "https://picsum.photos/683/388",
+    thumbnail_path: "https://dummyimage.com/600x400/000/fff",
   },
 ]
 
