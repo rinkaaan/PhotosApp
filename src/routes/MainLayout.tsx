@@ -10,8 +10,8 @@ import { CrumbHandle } from "../App"
 const items: SideNavigationProps.Item[] = [
   {
     type: "link",
-    text: "Home",
-    href: "/home",
+    text: "Albums",
+    href: "/albums",
   },
   {
     type: "link",
@@ -49,7 +49,7 @@ export default function MainLayout() {
   const matches = useMatches() as UIMatch<string, CrumbHandle>[]
   const crumbs = getCrumbs(matches)
   const [activeHref, setActiveHref] = useState<string | undefined>(undefined)
-  const { engineReady, navigationOpen, notifications, dirty, dirtyModalVisible, dirtyRedirectUrl, startingPath } = useSelector(mainSelector)
+  const { navigationOpen, notifications, dirty, dirtyModalVisible, dirtyRedirectUrl, startingPath } = useSelector(mainSelector)
 
   useEffect(() => {
     if (startingPath) {
@@ -69,7 +69,7 @@ export default function MainLayout() {
   }, [crumbs])
 
   if (location.pathname === "/") {
-    return <Navigate to="/home" replace/>
+    return <Navigate to="/albums" replace/>
   } else {
     return (
       <Fragment>
@@ -78,14 +78,14 @@ export default function MainLayout() {
             <SideNavigation
               header={{
                 text: "Photos",
-                href: "/home",
+                href: "/albums",
               }}
               onFollow={e => {
                 e.preventDefault()
                 if (!dirty) {
                   navigate(e.detail.href)
                 } else {
-                  let dirtyRedirectUrl = e.detail.href
+                  const dirtyRedirectUrl = e.detail.href
                   appDispatch(mainActions.updateSlice({ dirtyModalVisible: true, dirtyRedirectUrl }))
                 }
               }}

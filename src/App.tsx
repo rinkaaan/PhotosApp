@@ -1,4 +1,4 @@
-import { createHashRouter, RouterProvider } from "react-router-dom"
+import { createHashRouter, Navigate, RouterProvider } from "react-router-dom"
 import MainLayout from "./routes/MainLayout"
 import MainLayoutError from "./routes/MainLayoutError"
 import { mainSelector } from "./routes/mainSlice"
@@ -17,15 +17,19 @@ const router = createHashRouter([
     },
     children: [
       {
-        path: "/home",
-        lazy: () => import("./routes/home/HomeRoute"),
-        handle: createCrumb("Home", "/home"),
+        path: "/albums",
+        lazy: () => import("./routes/albums/AlbumsRoute"),
+        handle: createCrumb("Albums", "/albums"),
       },
       {
         path: "settings",
         lazy: () => import("./routes/settings/SettingsRoute"),
         handle: createCrumb("Settings", "/settings"),
       },
+      {
+        path: "*",
+        Component: () => <Navigate to="/albums"/>,
+      }
     ],
   },
 ])
