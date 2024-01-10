@@ -22,6 +22,11 @@ const router = createHashRouter([
         handle: createCrumb("Albums", "/albums"),
       },
       {
+        path: "/media",
+        lazy: () => import("./routes/all-media/AllMediaRoute"),
+        handle: createCrumb("All Media", "/media"),
+      },
+      {
         path: "settings",
         lazy: () => import("./routes/settings/SettingsRoute"),
         handle: createCrumb("Settings", "/settings"),

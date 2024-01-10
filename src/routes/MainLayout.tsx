@@ -15,6 +15,11 @@ const items: SideNavigationProps.Item[] = [
   },
   {
     type: "link",
+    text: "All Media",
+    href: "/media",
+  },
+  {
+    type: "link",
     text: "Settings",
     href: "/settings",
   },

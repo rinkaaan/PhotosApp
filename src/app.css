@@ -16,6 +16,7 @@ html, body {
     top: 0;
     width: 100%;
     background-color: #000716;
+    z-index: 6000;
 }
 
 .awsui_navigation-container_hyvsj_1tx15_672 {
