@@ -16,6 +16,7 @@
     "build:ios": "./scripts/create_ipa.sh",
     "gen:icon": "npx capacitor-assets generate --ios",
     "gen:ipa": "./scripts/create_ipa.sh",
+    "gen:openapi": "./scripts/gen.sh",
     "clear:derived-data": "rm -rf ./ios/DerivedData",
     "open:electron": "cap open @capacitor-community/electron",
     "sync:electron": "ionic cap sync @capacitor-community/electron",

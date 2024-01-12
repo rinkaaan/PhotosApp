@@ -1,12 +1,13 @@
 import { Alert, AppLayout, Box, Button, Flashbar, Modal, SideNavigation, SideNavigationProps, SpaceBetween } from "@cloudscape-design/components"
-import { Navigate, Outlet, UIMatch, useLocation, useMatches, useNavigate } from "react-router-dom"
+import { Navigate, Outlet, ScrollRestoration, UIMatch, useLocation, useMatches, useNavigate } from "react-router-dom"
 import { Fragment, useEffect, useState } from "react"
 import CloudBreadcrumbGroup from "../components/CloudBreadcrumbGroup"
 import { useSelector } from "react-redux"
-import { mainActions, mainSelector, prepareNotifications } from "./mainSlice"
 import { appDispatch } from "../common/store"
+import { mainActions, mainSelector } from "./mainSlice"
 import { CrumbHandle } from "../App"
-import ScrollToTop from "../components/ScrollToTop"
+
+import { prepareNotifications } from "../common/storeUtils"
 
 const items: SideNavigationProps.Item[] = [
   {
@@ -79,7 +80,7 @@ export default function MainLayout() {
   } else {
     return (
       <Fragment>
-        <ScrollToTop />
+        <ScrollRestoration />
         <AppLayout
           navigation={
             <SideNavigation

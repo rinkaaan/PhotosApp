@@ -2,12 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { FlashbarProps } from "@cloudscape-design/components"
 import { uuid } from "../common/typedUtils"
 import type { RootState } from "../common/reducers"
-// import { appDispatch } from "../common/store"
 
 export interface MainState {
   navigationOpen: boolean;
   notifications: Array<FlashbarProps.MessageDefinition>;
-  engineReady: boolean;
   dirty: boolean;
   dirtyModalVisible: boolean;
   dirtyRedirectUrl?: string;
@@ -16,9 +14,8 @@ export interface MainState {
 }
 
 const initialState: MainState = {
-  navigationOpen: false,
+  navigationOpen: true,
   notifications: [],
-  engineReady: false,
   dirty: false,
   dirtyModalVisible: false,
   dirtyRedirectUrl: undefined,
@@ -36,6 +33,8 @@ export const mainSlice = createSlice({
       return { ...state, ...action.payload }
     },
     addNotification(state, action: PayloadAction<Notification>) {
+      // if there is already a notification with the same content, don't add it
+      if (state.notifications.find(n => n.content === action.payload.content)) return
       const notification: FlashbarProps.MessageDefinition = {
         ...action.payload,
         dismissible: true,
@@ -56,17 +55,6 @@ export const mainSlice = createSlice({
     }
   },
 })
-
-export function prepareNotifications(notifications: Array<FlashbarProps.MessageDefinition>) {
-  return notifications.map(n => ({
-    ...n,
-    onDismiss: () => {
-      // if (n.id) {
-      //   appDispatch(mainActions.removeNotification(n.id))
-      // }
-    },
-  }))
-}
 
 export const mainReducer = mainSlice.reducer
 export const mainActions = mainSlice.actions

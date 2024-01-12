@@ -6,6 +6,7 @@ import { useSelector } from "react-redux"
 import "@cloudscape-design/global-styles/index.css"
 import "./app.css"
 import { Fragment } from "react"
+import { OpenAPI } from "../openapi-client"
 
 const router = createHashRouter([
   {
@@ -13,6 +14,7 @@ const router = createHashRouter([
     Component: MainLayout,
     errorElement: <MainLayoutError/>,
     loader: async () => {
+      OpenAPI.BASE = "http://localhost:34200"
       return null
     },
     children: [
