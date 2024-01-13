@@ -53,7 +53,6 @@ export function Component() {
   return (
     <Cards
       onSelectionChange={({ detail }) => {
-        console.log(detail?.selectedItems)
         setSelectedItems(detail?.selectedItems ?? [])
       }}
       selectedItems={selectedItems}

@@ -1,5 +1,6 @@
 import { format, isToday, isYesterday, parseISO } from "date-fns"
 import { v4 } from "uuid"
+import { ApiError } from "../../openapi-client"
 
 export function formatDate(inputDate?: string) {
   if (!inputDate) return null
@@ -20,5 +21,10 @@ export function sleep(ms: number) {
 
 export function uuid() {
   return v4()
+}
+
+export function getApiErrorMessage(error: any) {
+  const e = error as ApiError
+  return e.body?.message || "An unexpected error occurred"
 }
 

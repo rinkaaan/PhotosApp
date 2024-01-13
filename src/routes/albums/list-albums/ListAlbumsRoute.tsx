@@ -1,8 +1,11 @@
 import { Box, Cards, Header, Pagination, SpaceBetween, TextFilter } from "@cloudscape-design/components"
-import { useState } from "react"
+import { Fragment, useState } from "react"
 import { Album } from "../../../../openapi-client"
 import CloudLink from "../../../components/CloudLink"
 import CloudButton from "../../../components/CloudButton"
+import { appDispatch } from "../../../common/store"
+import { albumActions } from "../albumSlice"
+import NewAlbumModal from "./NewAlbumModal"
 
 const items: Album[] = [
   {
@@ -46,97 +49,105 @@ export function Component() {
   const isOnlyOneSelected = selectedItems.length === 1
 
   return (
-    <Cards
-      onSelectionChange={({ detail }) =>
-        setSelectedItems(detail?.selectedItems ?? [])
-      }
-      selectedItems={selectedItems}
-      ariaLabels={{
-        itemSelectionLabel: (e, t) => `select ${t.name}`,
-        selectionGroupLabel: "Item selection",
-      }}
-      cardDefinition={{
-        // header: item => item.name,
-        // make header a link to # using CloudLink component
-        header: item => <CloudLink href="#" fontSize="heading-m">{item.name}</CloudLink>,
-        sections: [
-          // {
-          //   id: "type",
-          //   header: "Type",
-          //   content: item => item.type,
-          // },
-          {
-            id: "image",
-            content: item => (
-              <img
-                src={item.thumbnail_path}
-                style={{
-                  width: "100%",
-                  height: "auto",
-                }}
-              />
-            ),
-          }
-        ],
-      }}
-      cardsPerRow={[
-        { cards: 1 },
-        { minWidth: 500, cards: 2 },
-      ]}
-      entireCardClickable
-      items={items}
-      loadingText="Loading resources"
-      selectionType="multi"
-      trackBy="name"
-      variant="full-page"
-      visibleSections={["type", "image"]}
-      stickyHeader={true}
-      empty={
-        <Box
-          margin={{ vertical: "xs" }}
-          textAlign="center"
-          color="inherit"
-        >
-          <SpaceBetween size="m">
-            <b>No resources</b>
-            <CloudButton>Create resource</CloudButton>
-          </SpaceBetween>
-        </Box>
-      }
-      filter={
-        <TextFilter filteringPlaceholder="Find resources" filteringText="Filtering" />
-      }
-      header={
-        <Header
-          variant="awsui-h1-sticky"
-          counter={
-            selectedItems?.length
-              ? "(" + selectedItems.length + "/10)"
-              : "(10)"
-          }
-          actions={
-            <SpaceBetween size="xs" direction="horizontal">
-              <CloudButton disabled={!isOnlyOneSelected}>
-                Edit
-              </CloudButton>
-              <CloudButton disabled={selectedItems.length === 0}>
-                Delete
-              </CloudButton>
-              <CloudButton variant="primary" href="new">
-                Create
-              </CloudButton>
+    <Fragment>
+      <Cards
+        onSelectionChange={({ detail }) =>
+          setSelectedItems(detail?.selectedItems ?? [])
+        }
+        selectedItems={selectedItems}
+        ariaLabels={{
+          itemSelectionLabel: (e, t) => `select ${t.name}`,
+          selectionGroupLabel: "Item selection",
+        }}
+        cardDefinition={{
+          // header: item => item.name,
+          // make header a link to # using CloudLink component
+          header: item => <CloudLink href="#" fontSize="heading-m">{item.name}</CloudLink>,
+          sections: [
+            // {
+            //   id: "type",
+            //   header: "Type",
+            //   content: item => item.type,
+            // },
+            {
+              id: "image",
+              content: item => (
+                <img
+                  src={item.thumbnail_path}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                  }}
+                />
+              ),
+            }
+          ],
+        }}
+        cardsPerRow={[
+          { cards: 1 },
+          { minWidth: 500, cards: 2 },
+        ]}
+        entireCardClickable
+        items={items}
+        loadingText="Loading resources"
+        selectionType="multi"
+        trackBy="name"
+        variant="full-page"
+        visibleSections={["type", "image"]}
+        stickyHeader={true}
+        empty={
+          <Box
+            margin={{ vertical: "xs" }}
+            textAlign="center"
+            color="inherit"
+          >
+            <SpaceBetween size="m">
+              <b>No resources</b>
+              <CloudButton>Create resource</CloudButton>
             </SpaceBetween>
-          }
-        >
-          Albums
-        </Header>
-      }
-      pagination={
-        <Pagination
-          currentPageIndex={1}
-          pagesCount={2}
-        />
-      }
-    />
+          </Box>
+        }
+        filter={
+          <TextFilter filteringPlaceholder="Find resources" filteringText="Filtering" />
+        }
+        header={
+          <Header
+            variant="awsui-h1-sticky"
+            counter={
+              selectedItems?.length
+                ? "(" + selectedItems.length + "/10)"
+                : "(10)"
+            }
+            actions={
+              <SpaceBetween size="xs" direction="horizontal">
+                <CloudButton disabled={!isOnlyOneSelected}>
+                  Edit
+                </CloudButton>
+                <CloudButton disabled={selectedItems.length === 0}>
+                  Delete
+                </CloudButton>
+                <CloudButton
+                  variant="primary"
+                  onClick={() => {
+                    appDispatch(albumActions.updateSlice({ newAlbumModalOpen: true }))
+                  }}
+                >
+                  Create
+                </CloudButton>
+              </SpaceBetween>
+            }
+          >
+            Albums
+          </Header>
+        }
+        pagination={
+          <Pagination
+            currentPageIndex={1}
+            pagesCount={2}
+          />
+        }
+      />
+      <NewAlbumModal />
+    </Fragment>
   )
 }

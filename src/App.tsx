@@ -27,11 +27,6 @@ const router = createHashRouter([
             index: true,
             lazy: () => import("./routes/albums/list-albums/ListAlbumsRoute"),
           },
-          {
-            path: "new",
-            lazy: () => import("./routes/albums/new-album/NewAlbumRoute"),
-            handle: createCrumb("New Album", "/albums/new"),
-          },
         ],
       },
       {

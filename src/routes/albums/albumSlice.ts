@@ -4,8 +4,8 @@ import { AlbumService } from "../../../openapi-client"
 import { mainActions } from "../mainSlice"
 import store from "../../common/store"
 import { getActionName } from "../../common/utils"
+import { getApiErrorMessage } from "../../common/typedUtils"
 
-import { convertApiError } from "../../common/storeUtils"
 
 type AsyncStatus = "pending" | "fulfilled" | "rejected"
 
@@ -15,6 +15,7 @@ export interface AlbumState {
 
   // new album route
   newAlbumName: string;
+  newAlbumModalOpen: boolean;
 }
 
 const initialState: AlbumState = {
@@ -23,6 +24,7 @@ const initialState: AlbumState = {
 
   // new album route
   newAlbumName: "",
+  newAlbumModalOpen: false,
 }
 
 export const albumSlice = createSlice({
@@ -39,10 +41,13 @@ export const albumSlice = createSlice({
     addMissingErrorMessage: (state, action: PayloadAction<string>) => {
       state.errorMessages[action.payload] = "Required"
     },
+    addErrorMessage: (state, action: PayloadAction<{ key: string, message: string }>) => {
+      state.errorMessages[action.payload.key] = action.payload.message
+    },
     resetSlice: () => {
       return initialState
     },
-    resetNewAlbumRoute: (state) => {
+    resetNewAlbumState: (state) => {
       const keysToReset = ["newAlbumName"]
       keysToReset.forEach(key => {
         state[key] = initialState[key]
@@ -67,8 +72,7 @@ export const addAlbum = createAsyncThunk(
   "album/addAlbum",
   async (_payload, { dispatch }) => {
     const { newAlbumName } = store.getState().album
-    // try {
-    await convertApiError(async () => {
+    try {
       const album = await AlbumService.postAlbum({ name: newAlbumName })
       dispatch(
         mainActions.addNotification({
@@ -76,16 +80,13 @@ export const addAlbum = createAsyncThunk(
           type: "success",
         }),
       )
-    })
-    // } catch (e) {
-    //   const e2 = e as ApiError
-    //   dispatch(
-    //     mainActions.addNotification({
-    //       content: e2.body?.message || "Error creating album",
-    //       type: "error",
-    //     }),
-    //   )
-    // }
+    } catch (e) {
+      dispatch(albumActions.addErrorMessage({
+        key: "newAlbum",
+        message: getApiErrorMessage(e),
+      }))
+      throw new Error()
+    }
   }
 )
 
