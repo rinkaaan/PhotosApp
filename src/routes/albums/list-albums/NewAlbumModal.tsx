@@ -6,6 +6,7 @@ import { FormEvent, useEffect } from "react"
 
 export default function NewAlbumModal() {
   const { errorMessages, newAlbumName, asyncStatus, newAlbumModalOpen } = useSelector(albumSelector)
+  const loading = asyncStatus["addAlbum"] === "pending"
 
   useEffect(() => {
     if (asyncStatus["addAlbum"] === "fulfilled") {
@@ -46,12 +47,14 @@ export default function NewAlbumModal() {
             <Button
               variant="link"
               onClick={onClose}
+              disabled={loading}
             >
               Cancel
             </Button>
             <Button
               variant="primary"
               onClick={onClose}
+              loading={loading}
             >
               Create
             </Button>

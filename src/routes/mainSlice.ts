@@ -14,7 +14,7 @@ export interface MainState {
 }
 
 const initialState: MainState = {
-  navigationOpen: true,
+  navigationOpen: false,
   notifications: [],
   dirty: false,
   dirtyModalVisible: false,

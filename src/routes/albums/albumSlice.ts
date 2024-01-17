@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "../../common/reducers"
-import { AlbumService } from "../../../openapi-client"
+import { Album, AlbumService } from "../../../openapi-client"
 import { mainActions } from "../mainSlice"
 import store from "../../common/store"
 import { getActionName } from "../../common/utils"
@@ -13,18 +13,26 @@ export interface AlbumState {
   errorMessages: Record<string, string>;
   asyncStatus: Record<string, AsyncStatus>;
 
-  // new album route
+  // new album modal
   newAlbumName: string;
   newAlbumModalOpen: boolean;
+
+  // list albums route
+  albums: Array<Album> | undefined;
+  noMoreAlbums: boolean;
 }
 
 const initialState: AlbumState = {
   errorMessages: {},
   asyncStatus: {},
 
-  // new album route
+  // new album modal
   newAlbumName: "",
   newAlbumModalOpen: false,
+
+  // list albums route
+  albums: undefined,
+  noMoreAlbums: false,
 }
 
 export const albumSlice = createSlice({
@@ -80,6 +88,9 @@ export const addAlbum = createAsyncThunk(
           type: "success",
         }),
       )
+      let { albums } = store.getState().album
+      if (!albums) albums = []
+      dispatch(albumActions.updateSlice({ albums: [album, ...albums] }))
     } catch (e) {
       dispatch(albumActions.addErrorMessage({
         key: "newAlbum",
@@ -87,6 +98,27 @@ export const addAlbum = createAsyncThunk(
       }))
       throw new Error()
     }
+  }
+)
+
+export const queryAlbums = createAsyncThunk(
+  "album/queryAlbums",
+  async (_payload, { dispatch }) => {
+    const queryAlbumsOut = await AlbumService.getAlbumQuery(undefined, 30, true)
+    dispatch(albumActions.updateSlice({ albums: queryAlbumsOut.albums }))
+  }
+)
+
+export const queryMoreAlbums = createAsyncThunk(
+  "album/queryMoreAlbums",
+  async (_payload, { dispatch }) => {
+    const { albums: curAlbums, noMoreAlbums } = store.getState().album
+    if (noMoreAlbums || !curAlbums) return
+    const lastId = curAlbums[curAlbums.length - 1].id
+    if (!lastId) return
+    const queryAlbumsOut = await AlbumService.getAlbumQuery(lastId, 30, true)
+    if (!queryAlbumsOut.albums || queryAlbumsOut.albums?.length === 0) return
+    dispatch(albumActions.updateSlice({ albums: [...curAlbums, ...queryAlbumsOut.albums], noMoreAlbums: queryAlbumsOut.no_more_albums }))
   }
 )
 
