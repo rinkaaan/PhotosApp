@@ -22,6 +22,10 @@ export default function NewAlbumModal() {
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
+    await onCreate()
+  }
+
+  async function onCreate() {
     if (!validate()) return
     await appDispatch(addAlbum())
   }
@@ -53,7 +57,7 @@ export default function NewAlbumModal() {
             </Button>
             <Button
               variant="primary"
-              onClick={onClose}
+              onClick={onCreate}
               loading={loading}
             >
               Create

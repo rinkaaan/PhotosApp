@@ -105,7 +105,7 @@ export const queryAlbums = createAsyncThunk(
   "album/queryAlbums",
   async (_payload, { dispatch }) => {
     const queryAlbumsOut = await AlbumService.getAlbumQuery(undefined, 30, true)
-    dispatch(albumActions.updateSlice({ albums: queryAlbumsOut.albums }))
+    dispatch(albumActions.updateSlice({ albums: queryAlbumsOut.albums, noMoreAlbums: queryAlbumsOut.no_more_albums }))
   }
 )
 
@@ -117,8 +117,27 @@ export const queryMoreAlbums = createAsyncThunk(
     const lastId = curAlbums[curAlbums.length - 1].id
     if (!lastId) return
     const queryAlbumsOut = await AlbumService.getAlbumQuery(lastId, 30, true)
-    if (!queryAlbumsOut.albums || queryAlbumsOut.albums?.length === 0) return
-    dispatch(albumActions.updateSlice({ albums: [...curAlbums, ...queryAlbumsOut.albums], noMoreAlbums: queryAlbumsOut.no_more_albums }))
+    if (!queryAlbumsOut.albums || queryAlbumsOut.albums?.length === 0) {
+      dispatch(albumActions.updateSlice({ noMoreAlbums: true }))
+    } else {
+      dispatch(albumActions.updateSlice({ albums: [...curAlbums, ...queryAlbumsOut.albums], noMoreAlbums: queryAlbumsOut.no_more_albums }))
+    }
+  }
+)
+
+export const deleteAlbums = createAsyncThunk(
+  "album/deleteAlbums",
+  async (albumIds: Array<string>, { dispatch }) => {
+    await AlbumService.deleteAlbum({ album_ids: albumIds })
+    dispatch(
+      mainActions.addNotification({
+        content: "Albums deleted",
+        type: "success",
+      }),
+    )
+    let { albums } = store.getState().album
+    if (!albums) albums = []
+    dispatch(albumActions.updateSlice({ albums: albums.filter(a => !albumIds.includes(a.id!)) }))
   }
 )
 

@@ -1,14 +1,15 @@
-import { Box, Cards, Header, SpaceBetween, Spinner, TextContent, TextFilter } from "@cloudscape-design/components"
-import { Fragment, useState } from "react"
+import { Alert, Box, Cards, Header, SpaceBetween, Spinner, TextContent, TextFilter } from "@cloudscape-design/components"
+import { Fragment, useEffect, useState } from "react"
 import { Album } from "../../../../openapi-client"
 import CloudLink from "../../../components/CloudLink"
 import CloudButton from "../../../components/CloudButton"
 import { appDispatch } from "../../../common/store"
-import { albumActions, albumSelector, queryAlbums, queryMoreAlbums } from "../albumSlice"
+import { albumActions, albumSelector, deleteAlbums, queryAlbums, queryMoreAlbums } from "../albumSlice"
 import NewAlbumModal from "./NewAlbumModal"
 import { useSelector } from "react-redux"
 import useDelayedTrue from "../../../hooks/useDelayedTrue"
 import useScrollToBottom from "../../../hooks/useScrollToBottom"
+import ConfirmModal from "../../../components/ConfirmModal"
 
 // const items: Album[] = [
 //   {
@@ -43,11 +44,6 @@ import useScrollToBottom from "../../../hooks/useScrollToBottom"
 //   },
 // ]
 
-export function loader() {
-  appDispatch(queryAlbums())
-  return null
-}
-
 export function Component() {
   const [
     selectedItems,
@@ -56,10 +52,33 @@ export function Component() {
   const { asyncStatus, albums } = useSelector(albumSelector)
   const showLoader = useDelayedTrue()
   const isOnlyOneSelected = selectedItems.length === 1
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false)
+
+  useEffect(() => {
+    if (albums === undefined) {
+      appDispatch(queryAlbums())
+    }
+  }, [])
 
   useScrollToBottom(() => {
     appDispatch(queryMoreAlbums())
   }, asyncStatus["queryAlbums"] === "pending" || asyncStatus["queryMoreAlbums"] === "pending")
+
+  function onDelete() {
+    const albumIds = selectedItems.map(item => item.id!)
+    appDispatch(deleteAlbums(albumIds))
+  }
+
+  useEffect(() => {
+    if (asyncStatus["deleteAlbums"] === "fulfilled") {
+      setDeleteModalVisible(false)
+    }
+  }, [asyncStatus["deleteAlbums"]])
+
+  function onRefresh() {
+    appDispatch(queryAlbums())
+    setSelectedItems([])
+  }
 
   return (
     <Fragment>
@@ -127,11 +146,6 @@ export function Component() {
         header={
           <Header
             variant="awsui-h1-sticky"
-            // counter={
-            //   selectedItems?.length
-            //     ? `(${selectedItems.length}/${albums.length})`
-            //     : `(${albums.length})`
-            // }
             counter={
               albums
                 ? selectedItems?.length
@@ -141,20 +155,26 @@ export function Component() {
             }
             actions={
               <SpaceBetween size="xs" direction="horizontal">
-                <CloudButton disabled={!isOnlyOneSelected}>
-                  Edit
-                </CloudButton>
-                <CloudButton disabled={selectedItems.length === 0}>
-                  Delete
-                </CloudButton>
+                <CloudButton
+                  disabled={!isOnlyOneSelected}
+                  iconName="edit"
+                />
+                <CloudButton
+                  disabled={selectedItems.length === 0}
+                  onClick={() => setDeleteModalVisible(true)}
+                  iconName="remove"
+                />
+                <CloudButton
+                  onClick={onRefresh}
+                  iconName="refresh"
+                />
                 <CloudButton
                   variant="primary"
                   onClick={() => {
                     appDispatch(albumActions.updateSlice({ newAlbumModalOpen: true }))
                   }}
-                >
-                  Create
-                </CloudButton>
+                  iconName="add-plus"
+                />
               </SpaceBetween>
             }
           >
@@ -179,6 +199,18 @@ export function Component() {
         )
       }
       <NewAlbumModal />
+      <ConfirmModal
+        confirmText="Delete"
+        title="Delete albums"
+        onConfirm={onDelete}
+        visible={deleteModalVisible}
+        onClose={() => setDeleteModalVisible(false)}
+        loading={asyncStatus["deleteAlbums"] === "pending"}
+      >
+        <Alert type="warning" statusIconAriaLabel="Warning">
+          Are you sure you want to delete the selected albums?
+        </Alert>
+      </ConfirmModal>
     </Fragment>
   )
 }
