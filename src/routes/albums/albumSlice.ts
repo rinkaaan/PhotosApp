@@ -4,7 +4,7 @@ import { Album, AlbumService } from "../../../openapi-client"
 import { mainActions } from "../mainSlice"
 import store from "../../common/store"
 import { getActionName } from "../../common/utils"
-import { getApiErrorMessage } from "../../common/typedUtils"
+import { getApiErrorMessage, sleep } from "../../common/typedUtils"
 
 
 type AsyncStatus = "pending" | "fulfilled" | "rejected"
@@ -20,6 +20,7 @@ export interface AlbumState {
   // list albums route
   albums: Array<Album> | undefined;
   noMoreAlbums: boolean;
+  searchQuery: string;
 }
 
 const initialState: AlbumState = {
@@ -33,6 +34,7 @@ const initialState: AlbumState = {
   // list albums route
   albums: undefined,
   noMoreAlbums: false,
+  searchQuery: "",
 }
 
 export const albumSlice = createSlice({
@@ -104,8 +106,10 @@ export const addAlbum = createAsyncThunk(
 export const queryAlbums = createAsyncThunk(
   "album/queryAlbums",
   async (_payload, { dispatch }) => {
-    const queryAlbumsOut = await AlbumService.getAlbumQuery(undefined, 30, true)
+    const { searchQuery } = store.getState().album
+    const queryAlbumsOut = await AlbumService.getAlbumQuery(undefined, 30, true, searchQuery)
     dispatch(albumActions.updateSlice({ albums: queryAlbumsOut.albums, noMoreAlbums: queryAlbumsOut.no_more_albums }))
+    await sleep(100)
   }
 )
 

@@ -49,7 +49,7 @@ export function Component() {
     selectedItems,
     setSelectedItems,
   ] = useState<Album[]>([])
-  const { asyncStatus, albums } = useSelector(albumSelector)
+  const { asyncStatus, albums, searchQuery } = useSelector(albumSelector)
   const showLoader = useDelayedTrue()
   const isOnlyOneSelected = selectedItems.length === 1
   const [deleteModalVisible, setDeleteModalVisible] = useState(false)
@@ -78,6 +78,15 @@ export function Component() {
   function onRefresh() {
     appDispatch(queryAlbums())
     setSelectedItems([])
+  }
+
+  function onSearch() {
+    appDispatch(queryAlbums())
+    setSelectedItems([])
+  }
+
+  function onCreate() {
+    appDispatch(albumActions.updateSlice({ newAlbumModalOpen: true }))
   }
 
   return (
@@ -136,12 +145,17 @@ export function Component() {
           >
             <SpaceBetween size="m">
               <b>No albums</b>
-              <CloudButton>Create album</CloudButton>
+              <CloudButton onClick={onCreate}>Create album</CloudButton>
             </SpaceBetween>
           </Box>
         }
         filter={
-          <TextFilter filteringPlaceholder="Find albums" filteringText="" />
+          <TextFilter
+            filteringPlaceholder="Search albums"
+            filteringText={searchQuery}
+            onChange={event => appDispatch(albumActions.updateSlice({ searchQuery: event.detail.filteringText }))}
+            onDelayedChange={onSearch}
+          />
         }
         header={
           <Header
@@ -167,12 +181,11 @@ export function Component() {
                 <CloudButton
                   onClick={onRefresh}
                   iconName="refresh"
+                  disabled={asyncStatus["queryAlbums"] === "pending"}
                 />
                 <CloudButton
                   variant="primary"
-                  onClick={() => {
-                    appDispatch(albumActions.updateSlice({ newAlbumModalOpen: true }))
-                  }}
+                  onClick={onCreate}
                   iconName="add-plus"
                 />
               </SpaceBetween>
