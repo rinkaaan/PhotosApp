@@ -1,13 +1,8 @@
 import type { CapacitorElectronConfig } from "@capacitor-community/electron"
-import {
-  CapElectronEventEmitter,
-  CapacitorSplashScreen,
-  setupCapacitorElectronPlugins,
-} from "@capacitor-community/electron"
+import { CapacitorSplashScreen, CapElectronEventEmitter, setupCapacitorElectronPlugins } from "@capacitor-community/electron"
 import chokidar from "chokidar"
 import type { MenuItemConstructorOptions } from "electron"
-import { app, BrowserWindow, Menu, MenuItem, nativeImage, Tray, session } from "electron"
-import electronIsDev from "electron-is-dev"
+import { app, BrowserWindow, Menu, MenuItem, nativeImage, session, Tray } from "electron"
 import electronServe from "electron-serve"
 import windowStateKeeper from "electron-window-state"
 import { join } from "path"
@@ -220,16 +215,12 @@ export class ElectronCapacitorApp {
 }
 
 // Set a CSP up for our application based on the custom scheme
-export function setupContentSecurityPolicy(customScheme: string): void {
+export function setupContentSecurityPolicy(): void {
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        "Content-Security-Policy": [
-          electronIsDev
-            ? `default-src ${customScheme}://* 'unsafe-inline' devtools://* 'unsafe-eval' http://* 'unsafe-eval' https://* 'unsafe-eval' ws://* 'unsafe-eval' wss://* 'unsafe-eval' data:`
-            : `default-src ${customScheme}://* 'unsafe-inline' http://* 'unsafe-eval' https://* 'unsafe-eval' ws://* 'unsafe-eval' wss://* 'unsafe-eval' data:`,
-        ],
+        "Content-Security-Policy": ["*"],
       },
     })
   })

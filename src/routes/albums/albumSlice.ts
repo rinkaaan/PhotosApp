@@ -4,10 +4,8 @@ import { Album, AlbumService } from "../../../openapi-client"
 import { mainActions } from "../mainSlice"
 import store from "../../common/store"
 import { getActionName } from "../../common/utils"
-import { getApiErrorMessage, sleep } from "../../common/typedUtils"
+import { AsyncStatus, getApiErrorMessage, sleep } from "../../common/typedUtils"
 
-
-type AsyncStatus = "pending" | "fulfilled" | "rejected"
 
 export interface AlbumState {
   errorMessages: Record<string, string>;
@@ -75,7 +73,7 @@ export const albumSlice = createSlice({
       .addMatcher(isFulfilled, (state, action) => {
         state.asyncStatus[getActionName(action)] = "fulfilled"
       })
-  }
+  },
 })
 
 export const addAlbum = createAsyncThunk(
@@ -100,7 +98,7 @@ export const addAlbum = createAsyncThunk(
       }))
       throw new Error()
     }
-  }
+  },
 )
 
 export const queryAlbums = createAsyncThunk(
@@ -110,7 +108,7 @@ export const queryAlbums = createAsyncThunk(
     const queryAlbumsOut = await AlbumService.getAlbumQuery(undefined, 30, true, searchQuery)
     dispatch(albumActions.updateSlice({ albums: queryAlbumsOut.albums, noMoreAlbums: queryAlbumsOut.no_more_albums }))
     await sleep(100)
-  }
+  },
 )
 
 export const queryMoreAlbums = createAsyncThunk(
@@ -126,7 +124,7 @@ export const queryMoreAlbums = createAsyncThunk(
     } else {
       dispatch(albumActions.updateSlice({ albums: [...curAlbums, ...queryAlbumsOut.albums], noMoreAlbums: queryAlbumsOut.no_more_albums }))
     }
-  }
+  },
 )
 
 export const deleteAlbums = createAsyncThunk(
@@ -142,7 +140,7 @@ export const deleteAlbums = createAsyncThunk(
     let { albums } = store.getState().album
     if (!albums) albums = []
     dispatch(albumActions.updateSlice({ albums: albums.filter(a => !albumIds.includes(a.id!)) }))
-  }
+  },
 )
 
 export const albumReducer = albumSlice.reducer

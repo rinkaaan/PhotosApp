@@ -85,7 +85,7 @@ export default function MainLayout() {
           navigation={
             <SideNavigation
               header={{
-                text: "Photos",
+                text: "Media",
                 href: "/albums",
               }}
               onFollow={e => {

@@ -7,7 +7,6 @@ import { appDispatch } from "../../../common/store"
 import { albumActions, albumSelector, deleteAlbums, queryAlbums, queryMoreAlbums } from "../albumSlice"
 import NewAlbumModal from "./NewAlbumModal"
 import { useSelector } from "react-redux"
-import useDelayedTrue from "../../../hooks/useDelayedTrue"
 import useScrollToBottom from "../../../hooks/useScrollToBottom"
 import ConfirmModal from "../../../components/ConfirmModal"
 
@@ -50,7 +49,7 @@ export function Component() {
     setSelectedItems,
   ] = useState<Album[]>([])
   const { asyncStatus, albums, searchQuery } = useSelector(albumSelector)
-  const showLoader = useDelayedTrue()
+  // const showLoader = useDelayedTrue()
   const isOnlyOneSelected = selectedItems.length === 1
   const [deleteModalVisible, setDeleteModalVisible] = useState(false)
 
@@ -92,7 +91,8 @@ export function Component() {
   return (
     <Fragment>
       <Cards
-        loading={asyncStatus["queryAlbums"] === "pending" && showLoader || albums === undefined}
+        // loading={showLoader && (asyncStatus["queryAlbums"] === "pending" || albums === undefined)}
+        loading={asyncStatus["queryAlbums"] === "pending" || albums === undefined}
         onSelectionChange={({ detail }) =>
           setSelectedItems(detail?.selectedItems ?? [])
         }
@@ -102,9 +102,7 @@ export function Component() {
           selectionGroupLabel: "Item selection",
         }}
         cardDefinition={{
-          // header: item => item.name,
-          // make header a link to # using CloudLink component
-          header: item => <CloudLink href="#" fontSize="heading-m">{item.name}</CloudLink>,
+          header: item => <CloudLink href="#" fontSize="heading-m">{item.name!.replace("uploader=", "").replace("website=", "").replace("media_type=", "")}</CloudLink>,
           sections: [
             // {
             //   id: "type",
@@ -127,7 +125,7 @@ export function Component() {
         }}
         cardsPerRow={[
           { cards: 1 },
-          { minWidth: 500, cards: 2 },
+          { minWidth: 1000, cards: 2 },
         ]}
         entireCardClickable
         items={albums || []}

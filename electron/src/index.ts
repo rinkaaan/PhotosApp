@@ -41,7 +41,7 @@ if (electronIsDev) {
   // Wait for electron app to be ready.
   await app.whenReady()
   // Security - Set Content-Security-Policy based on whether we are in dev mode.
-  setupContentSecurityPolicy(myCapacitorApp.getCustomURLScheme())
+  setupContentSecurityPolicy()
   // Initialize our app, build windows, and load content.
   await myCapacitorApp.init()
 })()

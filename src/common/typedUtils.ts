@@ -28,3 +28,4 @@ export function getApiErrorMessage(error: any) {
   return e.body?.message || "An unexpected error occurred"
 }
 
+export type AsyncStatus = "pending" | "fulfilled" | "rejected"

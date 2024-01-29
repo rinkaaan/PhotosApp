@@ -1,6 +1,6 @@
 {
-  "short_name": "Photos",
-  "name": "Photos",
+  "short_name": "Media",
+  "name": "Media",
   "icons": [
     {
       "src": "../icons/icon-48.webp",
