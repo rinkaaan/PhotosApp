@@ -7,6 +7,7 @@ import { useSelector } from "react-redux"
 import { mediaActions, mediaSelector, queryMedia } from "../mediaSlice"
 import { appDispatch } from "../../../common/store"
 import ConfirmModal from "../../../components/ConfirmModal"
+import { Link } from "react-router-dom"
 
 // const items: Media[] = [
 //   {
@@ -90,7 +91,17 @@ export function Component() {
               albumName = albumName.replace("website=", "")
               albumName = albumName.replace("media_type=", "")
               return (
-                <Badge key={uuid()}>{albumName}</Badge>
+                <Link
+                  key={uuid()}
+                  to="#"
+                  className="pointer"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                  }}
+                >
+                  <Badge>{albumName}</Badge>
+                </Link>
               )
             })
             return (

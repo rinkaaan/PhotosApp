@@ -102,7 +102,27 @@ export function Component() {
           selectionGroupLabel: "Item selection",
         }}
         cardDefinition={{
-          header: item => <CloudLink href="#" fontSize="heading-m">{item.name!.replace("uploader=", "").replace("website=", "").replace("media_type=", "")}</CloudLink>,
+          header: (item) => {
+            return (
+              <div
+                onClick={(e) => {
+                  e.stopPropagation()
+                }}
+              >
+                <CloudLink
+                  href="#"
+                  fontSize="heading-m"
+                >
+                  {
+                    item.name!
+                      .replace("uploader=", "")
+                      .replace("website=", "")
+                      .replace("media_type=", "")
+                  }
+                </CloudLink>
+              </div>
+            )
+          },
           sections: [
             // {
             //   id: "type",
