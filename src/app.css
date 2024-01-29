@@ -33,15 +33,3 @@ html, body {
     right: env(safe-area-inset-right) !important;
 }
 
-.pointer, .pointer * {
-    cursor: pointer !important;
-    transition: opacity 0.05s ease !important;
-}
-
-.pointer:hover {
-    opacity: 0.90;
-}
-
-.pointer:active {
-    opacity: 0.80;
-}

@@ -1,4 +1,4 @@
-import { Alert, Badge, Box, Cards, Header, SpaceBetween } from "@cloudscape-design/components"
+import { Alert, Box, Cards, Header, SpaceBetween } from "@cloudscape-design/components"
 import { Fragment, useEffect, useState } from "react"
 import { Media } from "../../../../openapi-client"
 import { uuid } from "../../../common/typedUtils"
@@ -7,7 +7,7 @@ import { useSelector } from "react-redux"
 import { mediaActions, mediaSelector, queryMedia } from "../mediaSlice"
 import { appDispatch } from "../../../common/store"
 import ConfirmModal from "../../../components/ConfirmModal"
-import { Link } from "react-router-dom"
+import BadgeLink from "../../../components/BadgeLink"
 
 // const items: Media[] = [
 //   {
@@ -91,7 +91,7 @@ export function Component() {
               albumName = albumName.replace("website=", "")
               albumName = albumName.replace("media_type=", "")
               return (
-                <Link
+                <BadgeLink
                   key={uuid()}
                   to="#"
                   className="pointer"
@@ -99,14 +99,20 @@ export function Component() {
                     e.preventDefault()
                     e.stopPropagation()
                   }}
+                  style={{
+                    height: "min-content"
+                  }}
                 >
-                  <Badge>{albumName}</Badge>
-                </Link>
+                  {albumName}
+                </BadgeLink>
               )
             })
             return (
               <SpaceBetween size="xs" direction="horizontal">
                 {links}
+                {/*<div className="badge">*/}
+                {/*  CheerS & Sports*/}
+                {/*</div>*/}
               </SpaceBetween>
             )
           },
